@@ -11,6 +11,14 @@ export async function POST(request: Request) {
         chunking: "word",
       }),
     });
+    
+    text.usage.then((usage) => {
+      console.log({
+        inputToken: usage.inputTokens,
+        outputToken: usage.outputTokens,
+        TotalTokens: usage.totalTokens,
+      })
+    })
 
     return text.toUIMessageStreamResponse();
   } catch (e) {
