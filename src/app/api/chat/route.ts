@@ -6,7 +6,22 @@ export async function POST(req: Request) {
     const { messages }: { messages: UIMessage[] } = await req.json();
     const result = streamText({
       model: google("gemini-2.5-flash"),
-      messages: await convertToModelMessages(messages),
+      messages: [
+        {
+          "role": "system",
+          "content": "Convert user question into coding example."
+        },
+         {
+          "role": "user",
+          "content": "How to open and close modal"
+        },
+         {
+          "role": "assistant",
+          "content": "const [isOpen , setIsOpen] = useState(false); \n setIsOpen((status) => setIsOpen(!status));"
+        },  
+        
+        ...await convertToModelMessages(messages),
+      ]
     });
 
     return result.toUIMessageStreamResponse();
